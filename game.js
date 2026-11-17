@@ -32,8 +32,8 @@ const PICK_WAIT = 2000, PICK_STEPS = 17, PICK_COUNT = 3;   // jeda sebelum rolli
    objs : urutan HARUS sesuai karakter kode ->
           [emoji cadangan, nama, nama-file-dasar, ukuran terbesar (piksel peta), jumlah varian (opsional)]
    Lokasi asset Look Around (di folder yang sama dengan index.html, di luar "In game Asset"):
-     Look Around/Level N/Angka +/<dasar> +.png      dan     Look Around/Level N/Angka -/<dasar> -.png
-     Objek bervarian (Penumpang): Look Around/Level 3/Angka +/Penumpang +/Penumpang 1 +.png  (1..4, dipilih acak)
+     Look Around/Level N/Angka Plus/<dasar> Plus.png      dan     Look Around/Level N/Angka Min/<dasar> Min.png
+     Objek bervarian (Penumpang): Look Around/Level 3/Angka Plus/Penumpang Plus/Penumpang 1 Plus.png  (1..4, dipilih acak)
    Kalau file belum ada, game memakai emoji + lencana +/- sebagai cadangan. */
 const LEVELS = {
   1: { place: 'Taman',   time: 150, reward: 100,
@@ -90,9 +90,9 @@ function genCode() {            // maksimal 4 karakter (jumlah objek per level)
   return s < .3 ? w.toUpperCase() : s < .5 ? w.toLowerCase() : w;
 }
 
-/* ============ ASSET OBJEK LOOK AROUND (+ dan -) ============ */
+/* ============ ASSET OBJEK LOOK AROUND (Plus dan Min) ============ */
 const oimg = (lv, o, neg, v = 1) => {
-  const g = neg ? '-' : '+', base = `Look Around/Level ${lv}/Angka ${g}/`;
+  const g = neg ? 'Min' : 'Plus', base = `Look Around/Level ${lv}/Angka ${g}/`;
   return (o[4] > 1) ? `${base}${o[2]} ${g}/${o[2]} ${v} ${g}.png` : `${base}${o[2]} ${g}.png`;
 };
 const oimgTag = (o, neg, cls = '', v = 1) =>
