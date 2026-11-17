@@ -1,0 +1,45 @@
+/* ============ Main Menu + Level Picker (dimuat setelah style.css) ============ */
+.mm,.lp{position:absolute;inset:0;overflow:hidden;background:#000;animation:pagein .5s ease-out}
+@keyframes pagein{from{opacity:0}to{opacity:1}}
+.mm-bg,.lp-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;-webkit-user-drag:none}
+
+/* ---- Main Menu: judul kiri atas (tidak terlalu tinggi), tombol Play di bawahnya ---- */
+.mm-title{position:absolute;left:1cqw;top:5cqw;width:50cqw;display:block;pointer-events:none;
+  filter:drop-shadow(0 .6cqw .8cqw rgba(0,0,0,.6));animation:titlein .7s ease-out}
+@keyframes titlein{from{opacity:0;transform:translateY(-1.5cqw)}to{opacity:1;transform:none}}
+.mm-play{position:absolute;left:13cqw;top:31.5cqw;width:26cqw;padding:0;border-radius:0;background:none;
+  transition:transform .15s,filter .15s}
+.mm-play img{width:100%;display:block;pointer-events:none;filter:drop-shadow(0 .4cqw .6cqw rgba(0,0,0,.7))}
+.mm-play:hover{transform:scale(1.08);filter:drop-shadow(0 0 1.2cqw #ffb000)}
+.mm-play:active{transform:scale(.97)}
+.mm-coin{position:absolute;left:2cqw;bottom:2cqw;background:rgba(0,0,0,.55);padding:.4cqw 1cqw;border-radius:.6cqw;font-size:1.2cqw}
+
+/* ---- Level Picker: judul Rolling kiri atas, kartu difficulty di bawahnya ---- */
+.lp-title{position:absolute;left:2cqw;top:2.5cqw;width:38cqw;display:block;pointer-events:none;
+  filter:drop-shadow(0 .5cqw .7cqw rgba(0,0,0,.6))}
+.lp-slot{position:absolute;left:9cqw;top:19cqw;width:24cqw;height:24cqw}
+.lp-card{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;pointer-events:none;
+  filter:drop-shadow(0 .6cqw .8cqw rgba(0,0,0,.6))}
+.lp-card.on{opacity:1}
+.lp-card.lock{animation:lockpop .45s ease-out}
+@keyframes lockpop{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1.04)}}
+.lp-sel{position:absolute;inset:-1.6cqw;border:.35cqw solid rgba(255,176,0,.35);border-radius:1.2cqw;pointer-events:none}
+.lp-sel.roll{border-color:rgba(255,176,0,.9);box-shadow:0 0 1.5cqw rgba(255,176,0,.45);animation:selpulse .4s infinite alternate}
+.lp-sel.lock{border-color:#ffd34a;box-shadow:0 0 2.6cqw #ffb000,inset 0 0 1.4cqw rgba(255,176,0,.35)}
+@keyframes selpulse{to{opacity:.55}}
+.lp-count{position:absolute;left:37cqw;top:25cqw;color:#ffb000;text-shadow:0 .2cqw .6cqw #000;line-height:1.1}
+.lp-info{font-size:1.8cqw;font-weight:bold;color:#fff;min-height:2.2cqw}
+.lp-lbl{font-size:1.4cqw;margin-top:1cqw;opacity:0}
+.lp-num{font:bold 9cqw "Courier New",monospace;opacity:0}
+.lp-count.go .lp-lbl,.lp-count.go .lp-num{opacity:1}
+.lp-num.tick{animation:numpop .5s ease-out}
+@keyframes numpop{from{transform:scale(1.5);opacity:.3}to{transform:none;opacity:1}}
+
+/* ---- Fade out ke in-game ---- */
+#fade{position:absolute;inset:0;z-index:40;background:#000;opacity:0;pointer-events:none;transition:opacity .8s ease-in-out}
+#fade.on{opacity:1;pointer-events:auto}
+
+@media (prefers-reduced-motion:reduce){
+  .mm,.lp,.mm-title,.lp-sel.roll,.lp-card.lock,.lp-num.tick{animation:none}
+  #fade{transition-duration:.01s}
+}

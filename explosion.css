@@ -1,0 +1,18 @@
+/* ============ Video ledakan saat kalah (dimuat setelah menu.css) ============ */
+#exp{position:absolute;inset:0;z-index:35;background:#000;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .8s ease-in}
+#exp.in{opacity:1}
+.exp-v{width:100%;height:100%;object-fit:contain;display:block;background:#000;transition:filter .6s}
+#exp.done .exp-v{filter:brightness(.45)}
+.exp-panel{position:absolute;left:50%;bottom:5cqw;transform:translateX(-50%);text-align:center;
+  background:rgba(10,10,10,.72);padding:1.4cqw 3.2cqw;border-radius:1cqw;font-size:1.8cqw;line-height:1.5;
+  animation:exppanel .5s ease-out}
+.exp-panel h1{font-size:5cqw;margin:0;color:#ff5a3c;letter-spacing:.05em}
+.exp-panel p{margin:.2cqw 0}
+.exp-cd b{color:#ffb000;font:bold 1.3em "Courier New",monospace}
+.exp-panel button{margin-top:.8cqw}
+@keyframes exppanel{from{opacity:0;transform:translate(-50%,1.5cqw)}to{opacity:1;transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.exp-panel{animation:none}.exp-v,#exp{transition:none}}
+
+/* tombol putar manual (kalau browser memblokir autoplay) & pesan galat video */
+.exp-tap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:2.6cqw;padding:1cqw 3cqw}
+.exp-err{font-size:1cqw;color:#ff9a8a;margin:.4cqw 0;max-width:70cqw;word-break:break-word}
