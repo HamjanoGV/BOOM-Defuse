@@ -1,8 +1,11 @@
 'use strict';
 /* ============ MODE TES (cheat) ============
-   Menambah bagian "Mode Tes" di panel volume (ikon speaker pojok kiri atas).
-   Dimuat PALING AKHIR di index.html.
-   Sebelum dirilis ke pemain, ubah CHEAT menjadi false. */
+   Panel cheat TERPISAH dari pengaturan suara. Hanya bisa dibuka/ditutup dengan tombol ]
+   (pengaturan suara tetap lewat ikon speaker di pojok kiri atas).
+   Dimuat PALING AKHIR di index.html, setelah clues.js:
+       <script src="clues.js"></script>
+       <script src="cheat.js"></script>
+   Sebelum dirilis ke pemain, ubah CHEAT menjadi false (atau hapus baris script-nya). */
 const CHEAT = true;
 
 if (CHEAT) (function () {
@@ -12,27 +15,24 @@ if (CHEAT) (function () {
   /* ---------- gaya ---------- */
   const css = document.createElement('style');
   css.textContent = `
-    #aupanel{width:18cqw}
-    #chsec{margin-top:.4cqw;padding-top:.7cqw;border-top:.12cqw solid #c9a66b;display:flex;flex-direction:column;gap:.5cqw}
-    #chsec>b{color:#ffb000;font-size:1.2cqw}
-    #chsec input{width:100%;font-size:1.2cqw;padding:.3cqw .5cqw;border-radius:.4cqw;border:.1cqw solid #c9a66b;
+    #cheat{position:absolute;top:5cqw;right:1cqw;z-index:60;width:20cqw;background:rgba(10,8,14,.95);
+      border:.15cqw solid #ff5a3c;border-radius:.8cqw;padding:.8cqw 1cqw;display:flex;flex-direction:column;gap:.55cqw;
+      font-size:1.15cqw;box-shadow:0 .5cqw 1.5cqw rgba(0,0,0,.7)}
+    #cheat[hidden]{display:none}
+    .chhead{display:flex;justify-content:space-between;align-items:center;color:#ff5a3c;font-size:1.3cqw}
+    .chhead small{color:#999;font-weight:normal;font-size:.95cqw;margin-left:.4cqw}
+    #chx{padding:.1cqw .6cqw;font-size:1.1cqw}
+    #cheat input{width:100%;font-size:1.25cqw;padding:.35cqw .6cqw;border-radius:.4cqw;border:.1cqw solid #c9a66b;
       background:#1d1824;color:#fff;user-select:text;-webkit-user-select:text}
-    #chsec button{font-size:1.05cqw;padding:.3cqw .6cqw}
+    #cheat button{font-size:1.1cqw;padding:.35cqw .6cqw}
     .chrow{display:flex;gap:.4cqw}.chrow button{flex:1}
     #chmsg{color:#ffb000;font-size:1cqw;min-height:1.3cqw;line-height:1.3}`;
   document.head.appendChild(css);
 
-  /* ---------- panel (pakai milik audio.js; kalau tidak ada, buat sendiri) ---------- */
-  let panel = $c('aupanel');
-  if (!panel) {
-    const w = document.createElement('div'); w.id = 'audio';
-    w.innerHTML = `<button id="aubtn" aria-label="Mode Tes">&#9881;</button><div id="aupanel" hidden></div>`;
-    stage.appendChild(w);
-    panel = $c('aupanel');
-    $c('aubtn').onclick = () => { panel.hidden = !panel.hidden; };
-  }
-  const sec = document.createElement('div'); sec.id = 'chsec';
-  sec.innerHTML = `<b>Mode Tes</b>
+  /* ---------- panel cheat (terpisah dari #audio) ---------- */
+  const panel = document.createElement('div'); panel.id = 'cheat'; panel.hidden = true;
+  panel.innerHTML = `
+    <div class="chhead"><b>Mode Tes<small>tekan ] untuk tutup</small></b><button id="chx" aria-label="Tutup">&#10005;</button></div>
     <input id="chn" type="number" min="0" value="1000" inputmode="numeric" aria-label="Jumlah koin">
     <div class="chrow"><button id="chadd">Tambah</button><button id="chset">Atur</button></div>
     <button id="chall">Buka semua petunjuk</button>
@@ -40,12 +40,23 @@ if (CHEAT) (function () {
     <button id="chrs">Reset cerita</button>
     <button id="chra">Reset semua</button>
     <small id="chmsg"></small>`;
-  panel.appendChild(sec);
+  stage.appendChild(panel);
+
+  /* ---------- shortcut: tekan ] untuk buka/tutup ---------- */
+  const toggle = () => {
+    panel.hidden = !panel.hidden;
+    if (!panel.hidden) { say(''); const i = $c('chn'); if (i) i.select(); }
+  };
+  document.addEventListener('keydown', e => {
+    if (e.key !== ']' || e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+    e.preventDefault(); toggle();
+  }, true);
+  $c('chx').onclick = () => { panel.hidden = true; };
 
   /* ---------- bantu ---------- */
   const num = () => Math.max(0, Math.floor(+$c('chn').value) || 0);
-  const say = t => { $c('chmsg').textContent = t; };
-  const sync = () => document.querySelectorAll('.mn-coin,.mm-coin,#ifcoin')
+  function say(t) { const m = $c('chmsg'); if (m) m.textContent = t; }
+  const sync = () => document.querySelectorAll('.mn-coin,.mm-coin,.inf-coin,#ifcoin')
     .forEach(e => { e.textContent = 'Koin: ' + money(); });
   const redraw = () => {                         // gambar ulang layar kalau tidak sedang bermain
     if (typeof S !== 'undefined' && S && !S.over) return;
